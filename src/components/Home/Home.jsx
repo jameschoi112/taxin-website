@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Phone, MessageCircle, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Navigation, Autoplay } from 'swiper/modules';
+
 
 const Home = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -100,7 +103,7 @@ const scrollTextVariants = {
       </motion.header>
 
       {/* Hero Section with Animations */}
-<div className="relative h-[85vh] overflow-hidden">
+<div className="relative h-[100dvh] md:h-[85dvh] overflow-hidden">
   {/* Background Image */}
   <div className="absolute inset-0">
     <img
@@ -108,13 +111,13 @@ const scrollTextVariants = {
       alt="배경"
       className="w-full h-full object-cover"
     />
-    <div className="absolute inset-0 bg-black/50" />
+    <div className="absolute inset-0 bg-black/40" />
   </div>
 
   {/* Animated Content */}
   <div className="relative h-full flex flex-col items-center justify-center text-center px-6">
     <motion.h2
-      className="text-xl md:text-6xl font-bold text-white mb-6"
+      className="text-xl md:text-6xl font-bold text-white mb-4 md:mb-6"
       initial="hidden"
       animate={isLoaded ? "visible" : "hidden"}
       variants={titleVariants}
@@ -123,7 +126,7 @@ const scrollTextVariants = {
     </motion.h2>
 
     <motion.p
-      className="text-xl md:text-2xl font-bold text-white mb-12"
+      className="text-xl md:text-2xl font-bold text-white mb-8 md:mb-12"
       initial="hidden"
       animate={isLoaded ? "visible" : "hidden"}
       variants={subtitleVariants}
@@ -138,15 +141,15 @@ const scrollTextVariants = {
       animate={isLoaded ? "visible" : "hidden"}
       variants={shapeVariants}
     >
-      <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/20 rounded-full blur-xl" />
-      <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-sky-400/20 rounded-full blur-xl" />
-      <div className="absolute bottom-1/4 left-1/3 w-40 h-40 bg-white/20 rounded-full blur-xl" />
+      <div className="absolute top-1/4 left-1/4 w-24 md:w-32 h-24 md:h-32 bg-blue-500/20 rounded-full blur-xl" />
+      <div className="absolute top-1/3 right-1/4 w-32 md:w-48 h-32 md:h-48 bg-sky-400/20 rounded-full blur-xl" />
+      <div className="absolute bottom-1/4 left-1/3 w-28 md:w-40 h-28 md:h-40 bg-white/20 rounded-full blur-xl" />
     </motion.div>
 
     {/* Scroll Indicator */}
-    <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+    <div className="absolute bottom-8 md:bottom-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
       <motion.p
-        className="text-white text-sm font-light tracking-widest mb-2"
+        className="text-white text-xs md:text-sm font-light tracking-widest mb-2"
         initial="hidden"
         animate={isLoaded ? "visible" : "hidden"}
         variants={scrollTextVariants}
@@ -158,117 +161,150 @@ const scrollTextVariants = {
         animate={isLoaded ? "visible" : "hidden"}
         variants={scrollIndicatorVariants}
       >
-        <ChevronDown className="text-white w-6 h-6" />
+        <ChevronDown className="text-white w-5 md:w-6 h-5 md:h-6" />
       </motion.div>
     </div>
   </div>
 </div>
 
       {/* Services Section */}
-      <section className="py-24 relative min-h-[600px] overflow-hidden">
-        {/* Background Image with Blur Effect */}
-        <div className="absolute top-0 left-0 right-0 bottom-0 z-0">
-          <img
-            src="/images/service-bg.jpg"
-            alt="background"
-            loading="lazy"
-            className="absolute top-1/2 left-1/2 min-w-full min-h-full object-cover -translate-x-1/2 -translate-y-1/2"
-            style={{
-              filter: 'blur(8px)',
-              opacity: '0.15'
-            }}
-          />
-        </div>
+<section className="py-24 relative min-h-[600px] overflow-hidden">
+  {/* Background Image with Blue Overlay */}
+  <div className="absolute top-0 left-0 right-0 bottom-0 z-0">
+    <img
+      src="/images/service-bg.jpg"
+      alt="background"
+      loading="lazy"
+      className="absolute top-1/2 left-1/2 min-w-full min-h-full object-cover -translate-x-1/2 -translate-y-1/2"
+    />
+    <div className="absolute inset-0 bg-blue-900/50" />
+  </div>
 
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-b from-white via-white to-slate-50 opacity-90" />
+  <div className="container mx-auto px-6 relative z-10">
+    {/* Introduction Text - Changed to left align */}
+    <div className="max-w-2xl mb-16">
+      <motion.p
+        className="text-white text-xl font-bold :text-2xl leading-relaxed"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        세무법인 택스인은<br />
+        세무 전문가들이 모인<br /> 전문 기관으로<br />
+        아래의 서비스들을 제공드립니다
+      </motion.p>
+    </div>
 
-        <div className="container mx-auto px-6 relative z-10">
-          <h2 className="text-4xl font-bold text-blue-900 mb-4">
-            Services
-          </h2>
-          <p className="text-xl text-gray-600 mb-16">세무법인 택스인에서 제공하는 서비스입니다.</p>
-          <div className="grid grid-cols-2 gap-4 max-w-3xl mx-auto">
-            <motion.div
-              className="group bg-blue-900 bg-opacity-100 rounded-lg p-4 hover:bg-opacity-25 transition-all duration-300 flex flex-col items-center"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="w-12 h-12 flex items-center justify-center mb-2">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
+    {/* Service Slides */}
+    <div className="max-w-5xl mx-auto">
+      <Swiper
+        modules={[Pagination, Navigation, Autoplay]}
+        pagination={{
+          clickable: true,
+          bulletClass: 'swiper-pagination-bullet !w-6 !h-1 !rounded-none',
+          bulletActiveClass: 'swiper-pagination-bullet-active !bg-blue-500',
+        }}
+        navigation
+        grabCursor={true}
+        autoplay={{
+          delay: 4000,
+          disableOnInteraction: false,
+        }}
+        slidesPerView={1}
+        centeredSlides={true}
+        spaceBetween={30}
+        loop={true}
+        className="service-slider"
+        breakpoints={{
+          // 모바일에서는 한 장만 보이도록
+          640: {
+            slidesPerView: 1.5,
+            spaceBetween: 20,
+          },
+          // 태블릿 이상에서는 1.5장 보이도록
+          768: {
+            slidesPerView: 1.5,
+            spaceBetween: 30,
+          }
+        }}
+      >
+        {[
+          {
+            image: '/images/service1.jpg',
+            titleKo: '기장 대리',
+            titleEn: 'Tax Accounting Services'
+          },
+          {
+            image: '/images/service2.jpg',
+            titleKo: '세무신고',
+            titleEn: 'Tax Filing Services'
+          },
+          {
+            image: '/images/service3.jpg',
+            titleKo: '조사 대행',
+            titleEn: 'Tax Audit Representation'
+          },
+          {
+            image: '/images/service4.jpg',
+            titleKo: '양도소득세 및 상속 증여세',
+            titleEn: 'Capital Gains, Inheritance, and Gift Tax Advisory'
+          },
+          {
+            image: '/images/service5.jpg',
+            titleKo: '조세 컨설팅',
+            titleEn: 'Tax Advisory and Consulting'
+          }
+        ].map((service, index) => (
+          <SwiperSlide key={index}>
+            <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
+              <img
+                src={service.image}
+                alt={service.titleKo}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                <h3 className="text-white text-lg font-medium mb-1">
+                  {service.titleKo}
+                </h3>
+                <p className="text-sky-300 text-sm">
+                  {service.titleEn}
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-white text-center">기장 대리</h3>
-            </motion.div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
+  </div>
+</section>
 
-            <motion.div
-              className="group bg-blue-900 bg-opacity-100 rounded-lg p-4 hover:bg-opacity-25 transition-all duration-300 flex flex-col items-center"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="w-12 h-12 flex items-center justify-center mb-2">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-white text-center">세무 신고</h3>
-            </motion.div>
+{/* Add these styles to your global CSS */}
+<style jsx global>{`
+  .service-slider .swiper-pagination {
+    position: relative;
+    margin-top: 2rem;
+  }
 
-            <motion.div
-              className="group bg-blue-900 bg-opacity-100 rounded-lg p-4 hover:bg-opacity-25 transition-all duration-300 flex flex-col items-center"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="w-12 h-12 flex items-center justify-center mb-2">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-white text-center">조사 대행</h3>
-            </motion.div>
+  .service-slider .swiper-button-next,
+  .service-slider .swiper-button-prev {
+    color: white;
+  }
 
-            <motion.div
-              className="group bg-blue-900 bg-opacity-100 rounded-lg p-4 hover:bg-opacity-25 transition-all duration-300 flex flex-col items-center"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="w-12 h-12 flex items-center justify-center mb-2">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-white text-center">양도/상속/증여</h3>
-            </motion.div>
+  .service-slider .swiper-button-next:after,
+  .service-slider .swiper-button-prev:after {
+    font-size: 1.5rem;
+  }
 
-            <motion.div
-              className="group bg-blue-900 bg-opacity-100 rounded-lg p-4 hover:bg-opacity-25 transition-all duration-300 flex flex-col items-center"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="w-12 h-12 flex items-center justify-center mb-2">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-white text-center">절세 컨설팅</h3>
-            </motion.div>
+  .service-slider .swiper-pagination-bullet {
+    background: white;
+    opacity: 0.5;
+  }
 
-            <motion.div
-              className="group bg-blue-900 bg-opacity-100 rounded-lg p-4 hover:bg-opacity-25 transition-all duration-300 flex flex-col items-center"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="w-12 h-12 flex items-center justify-center mb-2">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-white text-center">세무 상담</h3>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+  .service-slider .swiper-pagination-bullet-active {
+    opacity: 1;
+  }
+`}</style>
 
       {/* Contact Section */}
       <section className="py-20 bg-white">

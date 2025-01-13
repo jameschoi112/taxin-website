@@ -1,3 +1,7 @@
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -37,4 +41,28 @@ code {
   .swiper-button-next {
     display: none;
   }
+}
+
+/* Service Slider Styles */
+.service-slider .swiper-pagination {
+  position: relative;
+  margin-top: 2rem;
+}
+
+.service-slider .swiper-button-next:after,
+.service-slider .swiper-button-prev:after {
+  font-size: 1.5rem;
+}
+
+.service-slider .swiper-pagination-bullet {
+  width: 1.5rem !important;  /* 24px */
+  height: 0.25rem !important; /* 4px */
+  border-radius: 0 !important;
+  background: white !important;
+  opacity: 0.5;
+}
+
+.service-slider .swiper-pagination-bullet-active {
+  opacity: 1;
+  background: rgb(96 165 250) !important; /* sky-400 color */
 }
