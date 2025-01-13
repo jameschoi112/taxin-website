@@ -12,15 +12,15 @@ const Home = () => {
 
   const slides = [
     {
-      title: ["35년", "이상의 경력을 가진", "전문 세무사"],
+      title: ["35년 이상의" ,"경력을 가진 전문 세무사"],
       image: "/images/slides/slide1.jpg"
     },
     {
-      title: ["현장 경험을", "바탕으로", "빠른 세무 문제 해결"],
+      title: ["현장 경험을 바탕으로", "빠른 세무 문제 해결"],
       image: "/images/slides/slide2.jpg"
     },
     {
-      title: ["고객 별", "최적의 맞춤형", "세무 서비스 제공"],
+      title: ["고객 별 최적의 맞춤형", "세무 서비스 제공"],
       image: "/images/slides/slide3.jpg"
     },
     {
@@ -73,7 +73,7 @@ const Home = () => {
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-60">
                   <div className="container mx-auto px-6 h-full flex items-center">
-                    <h2 className="text-white text-5xl font-bold max-w-3xl">
+                    <h2 className="text-white text-3xl font-bold max-w-3xl">
                       {slide.title.map((line, i) => (
                         <div key={i} className="leading-tight mb-2">
                           {line}
@@ -171,29 +171,30 @@ const Home = () => {
 
       {/* Contact Section */}
       <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-blue-900 mb-12 text-left">
+        <div className="container mx-auto">
+          <h2 className="text-4xl font-bold text-blue-900 mb-12 px-6">
             Contacts
           </h2>
-          <div className="grid md:grid-cols-2 gap-10">
-            <div className="bg-blue-50 p-8 rounded-xl shadow-md">
-              <h3 className="text-2xl font-bold text-blue-900 mb-6">전화 상담</h3>
-              <p className="text-lg font-semibold mb-2">평일 오전 9시 ~ 오후 6시</p>
-              <p className="text-lg font-semibold mb-6">토,일 공휴일 휴무</p>
-              <p className="text-3xl text-blue-800 font-bold mb-6">031-206-7676</p>
+          <div className="grid md:grid-cols-2">
+            <div className="bg-gray-800 p-8">
+              <h3 className="text-2xl font-bold text-blue-400 mb-6">전화 상담</h3>
+              <p className="text-lg text-white font-semibold mb-2">평일 오전 9시 ~ 오후 6시</p>
+              <p className="text-lg text-white font-semibold mb-6">토,일 공휴일 휴무</p>
+              <p className="text-3xl text-blue-500 font-bold mb-6">031-206-7676</p>
               <button
                 onClick={handleCall}
-                className="flex items-center justify-center w-full bg-blue-900 text-white py-4 rounded-xl hover:bg-blue-800 transition-colors text-lg font-semibold"
+                className="flex items-center justify-center w-full bg-blue-800 text-white py-4 rounded-xl hover:bg-blue-800 transition-colors text-lg font-semibold"
               >
                 <Phone className="mr-3" size={24} />
                 전화 연결
               </button>
             </div>
-            <div className="bg-blue-50 p-8 rounded-xl shadow-md">
-              <h3 className="text-2xl font-bold text-blue-900 mb-6">메일 상담</h3>
+            <div className="bg-gray-700 p-8">
+              <h3 className="text-2xl font-bold text-blue-400 mb-6">메일 상담</h3>
+              <p className="text-lg text-white font-semibold mb-2">언제든 상담 가능합니다.</p>
               <button
                 onClick={() => setShowChatModal(true)}
-                className="flex items-center justify-center w-full bg-blue-900 text-white py-4 rounded-xl hover:bg-blue-800 transition-colors text-lg font-semibold"
+                className="flex items-center justify-center w-full bg-blue-800 text-white py-4 rounded-xl hover:bg-blue-800 transition-colors text-lg font-semibold"
               >
                 <MessageCircle className="mr-3" size={24} />
                 상담하러 가기
