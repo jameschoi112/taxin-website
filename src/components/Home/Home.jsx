@@ -3,7 +3,8 @@ import { Menu, X, Phone, MessageCircle, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
-
+import { useForm } from 'react-hook-form';
+import emailjs from '@emailjs/browser';
 
 const Home = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -13,6 +14,29 @@ const Home = () => {
   useEffect(() => {
     setIsLoaded(true);
   }, []);
+  const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm();
+
+const onSubmit = async (data) => {
+  try {
+    await emailjs.send(
+      'YOUR_SERVICE_ID',          // EmailJS Service ID
+      'YOUR_TEMPLATE_ID',         // EmailJS Template ID
+      {
+        to_name: "관리자",
+        from_name: data.name,
+        phone: data.phone,
+        message: data.message,
+      },
+      'YOUR_PUBLIC_KEY'           // EmailJS Public Key
+    );
+
+    alert('상담 신청이 완료되었습니다.');
+    reset();
+  } catch (error) {
+    console.error('Error:', error);
+    alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.');
+  }
+};
 
   const handleCall = () => {
     window.location.href = 'tel:031-206-7676';
@@ -306,52 +330,110 @@ const scrollTextVariants = {
   }
 `}</style>
 
-      {/* Contact Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-bold text-blue-900 mb-12 px-6">
-            Contacts
-          </h2>
-          <div className="grid md:grid-cols-2">
-            <motion.div
-              className="bg-gray-800 p-8"
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <h3 className="text-2xl font-bold text-blue-400 mb-6">전화 상담</h3>
-              <p className="text-lg text-white font-semibold mb-2">평일 오전 9시 ~ 오후 6시</p>
-              <p className="text-lg text-white font-semibold mb-6">토,일 공휴일 휴무</p>
-              <p className="text-3xl text-blue-500 font-bold mb-6">031-206-7676</p>
-              <motion.button
-                onClick={handleCall}
-                className="flex items-center justify-center w-full bg-blue-800 text-white py-4 rounded-xl hover:bg-blue-700 transition-colors text-lg font-semibold"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Phone className="mr-3" size={24} />
-                전화 연결
-              </motion.button>
-            </motion.div>
-            <motion.div
-              className="bg-gray-700 p-8"
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <h3 className="text-2xl font-bold text-blue-400 mb-6">메일 상담</h3>
-              <p className="text-lg text-white font-semibold mb-2">언제든 상담 가능합니다.</p>
-              <motion.button
-                onClick={() => setShowChatModal(true)}
-                className="flex items-center justify-center w-full bg-blue-800 text-white py-4 rounded-xl hover:bg-blue-700 transition-colors text-lg font-semibold mt-auto"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <MessageCircle className="mr-3" size={24} />
-                상담하러 가기
-              </motion.button>
-            </motion.div>
+      {/* Contacts Section */}
+<section className="py-24 relative overflow-hidden">
+  {/* Background with gradient */}
+  <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-sky-900" />
+
+  <div className="container mx-auto px-6 relative z-10">
+    <div className="grid md:grid-cols-2 gap-8">
+      {/* Phone Consultation */}
+      <motion.div
+        className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="flex items-center space-x-4 mb-6">
+          <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+            <Phone className="text-white" size={24} />
+          </div>
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-1">전화 상담</h3>
+            <p className="text-blue-200">평일 오전 9시 ~ 오후 6시</p>
           </div>
         </div>
-      </section>
+
+        <div className="space-y-4 mb-8">
+          <p className="text-lg text-white/80">토,일 공휴일 휴무</p>
+          <p className="text-3xl text-white font-bold">031-206-7676</p>
+        </div>
+
+        <motion.button
+          onClick={handleCall}
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-4 px-6 rounded-xl flex items-center justify-center space-x-3 transition-colors"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <Phone size={20} />
+          <span className="text-lg font-medium">전화 연결하기</span>
+        </motion.button>
+      </motion.div>
+
+      {/* Consultation Form */}
+      <motion.div
+        className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        <div className="flex items-center space-x-4 mb-6">
+          <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+            <MessageCircle className="text-white" size={24} />
+          </div>
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-1">상담 신청</h3>
+            <p className="text-blue-200">어떤 것이라도<br />편하게 문의주셔도 좋습니다.</p>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <input
+              type="text"
+              placeholder="성함"
+              {...register('name', { required: true })}
+              className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <input
+              type="tel"
+              placeholder="연락처"
+              {...register('phone', { required: true })}
+              className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <textarea
+              placeholder="문의 내용"
+              {...register('message', { required: true })}
+              className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[120px]"
+            />
+          </div>
+          <motion.button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-4 px-6 rounded-xl flex items-center justify-center space-x-3 transition-colors"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <span className="text-lg font-medium">전송중...</span>
+            ) : (
+              <>
+                <MessageCircle size={20} />
+                <span className="text-lg font-medium">상담 신청하기</span>
+              </>
+            )}
+          </motion.button>
+        </form>
+      </motion.div>
+    </div>
+  </div>
+</section>
 
       {/* Footer */}
       <footer className="bg-blue-900 text-white py-12">
@@ -374,85 +456,82 @@ const scrollTextVariants = {
       </footer>
 
       {/* Sidebar */}
-      <motion.div
-        className={`fixed inset-0 z-50 ${isSidebarOpen ? 'visible' : 'invisible'}`}
-        initial={false}
-        animate={isSidebarOpen ? "visible" : "hidden"}
-        variants={{
-          visible: { opacity: 1 },
-          hidden: { opacity: 0 }
-        }}
-        transition={{ duration: 0.3 }}
+<motion.div
+  className={`fixed inset-0 z-50 ${isSidebarOpen ? 'visible' : 'invisible'}`}
+  initial={false}
+  animate={isSidebarOpen ? "visible" : "hidden"}
+  variants={{
+    visible: { opacity: 1 },
+    hidden: { opacity: 0 }
+  }}
+  transition={{ duration: 0.3 }}
+>
+  {/* Backdrop with blur */}
+  <motion.div
+    className="absolute inset-0 backdrop-blur-sm bg-black/30"
+    variants={{
+      visible: { opacity: 1 },
+      hidden: { opacity: 0 }
+    }}
+    transition={{ duration: 0.3 }}
+    onClick={() => setIsSidebarOpen(false)}
+  />
+
+  {/* Sidebar Content */}
+  <motion.div
+    className="absolute right-0 top-0 w-80 h-full bg-gradient-to-br from-blue-900 via-blue-800 to-sky-900"
+    variants={{
+      visible: { x: 0 },
+      hidden: { x: "100%" }
+    }}
+    transition={{ type: "spring", damping: 20 }}
+  >
+    {/* Header */}
+    <div className="p-6 flex justify-between items-center border-b border-white/10">
+      <div className="flex items-center">
+        <img src="/images/logo2.png" alt="택스인 로고" className="h-10 w-auto" />
+        <h2 className="ml-3 text-xl font-bold text-white">세무법인 택스인</h2>
+      </div>
+      <motion.button
+        onClick={() => setIsSidebarOpen(false)}
+        className="text-white/80 hover:text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
       >
-        <motion.div
-          className="absolute inset-0 bg-black"
-          variants={{
-            visible: { opacity: 0.6 },
-            hidden: { opacity: 0 }
-          }}
-          transition={{ duration: 0.3 }}
-          onClick={() => setIsSidebarOpen(false)}
-        />
-        <motion.div
-          className="absolute right-0 top-0 w-96 h-full bg-gradient-to-b from-blue-50 to-white shadow-2xl"
-          variants={{
-            visible: { x: 0 },
-            hidden: { x: "100%" }
-          }}
-          transition={{ type: "spring", damping: 20 }}
-        >
-          <div className="p-8 flex justify-between items-center border-b border-blue-100">
-            <div className="flex items-center">
-              <img src="/images/logo.png" alt="택스인 로고" className="h-12 w-auto" />
-              <h2 className="ml-4 text-2xl font-bold text-blue-900">세무법인 택스인</h2>
-            </div>
-            <motion.button
-              onClick={() => setIsSidebarOpen(false)}
-              className="text-blue-900 hover:text-blue-700 p-2 hover:bg-blue-50 rounded-lg transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <X size={28} />
-            </motion.button>
-          </div>
-          <nav className="mt-8">
-            <ul className="space-y-2">
-              <motion.li
-                whileHover={{ x: 10 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <a href="#" className="flex items-center px-8 py-5 text-blue-900 font-bold hover:bg-blue-50 transition-colors border-l-4 border-transparent hover:border-blue-600">
-                  <span className="text-xl">세무사 소개</span>
-                </a>
-              </motion.li>
-              <motion.li
-                className="border-t border-blue-100"
-                whileHover={{ x: 10 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <a href="#" className="flex items-center px-8 py-5 text-blue-900 font-bold hover:bg-blue-50 transition-colors border-l-4 border-transparent hover:border-blue-600">
-                  <span className="text-xl">회사 소개</span>
-                </a>
-              </motion.li>
-              <motion.li
-                className="border-t border-blue-100"
-                whileHover={{ x: 10 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <a href="#" className="flex items-center px-8 py-5 text-blue-900 font-bold hover:bg-blue-50 transition-colors border-l-4 border-transparent hover:border-blue-600">
-                  <span className="text-xl">오시는 길</span>
-                </a>
-              </motion.li>
-            </ul>
-          </nav>
-          <div className="absolute bottom-0 w-full p-8 border-t border-blue-100 bg-blue-50">
-            <p className="text-lg text-blue-900 font-bold text-center">
-              세무법인 택스인과 함께<br />
-              더 나은 미래를 설계하세요
-            </p>
-          </div>
-        </motion.div>
-      </motion.div>
+        <X size={24} />
+      </motion.button>
+    </div>
+
+    {/* Navigation */}
+    <nav className="mt-6">
+      <div className="px-3 ">
+        {[
+          { title: '세무사 소개', href: '#' },
+          { title: '회사 소개', href: '#' },
+          { title: '오시는 길', href: '#' }
+        ].map((item, index) => (
+          <motion.a
+            key={item.title}
+            href={item.href}
+            className="flex items-center px-4 py-4 text-white/80 hover:text-white rounded-lg hover:bg-white/10 transition-colors mb-1"
+            whileHover={{ x: 10 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            <span className="text-lg font-bold">{item.title}</span>
+          </motion.a>
+        ))}
+      </div>
+    </nav>
+
+    {/* Footer */}
+    <div className="absolute bottom-0 w-full p-6 border-t border-white/10 bg-white/5">
+      <p className="text-white/80 text-center">
+        세무법인 택스인과 함께<br />
+        더 나은 미래를 설계하세요
+      </p>
+    </div>
+  </motion.div>
+</motion.div>
 
       {/* Chat Modal */}
       {showChatModal && (
