@@ -399,6 +399,119 @@ const scrollTextVariants = {
   }
 `}</style>
 
+      {/* Introduction Section */}
+<section className="relative py-20 overflow-hidden">
+  {/* Background with blur */}
+  <div className="absolute inset-0">
+    <img
+      src="/images/intro-bg.jpg"
+      alt="background"
+      className="w-full h-full object-cover"
+    />
+    <div className="absolute inset-0 bg-white/60 backdrop-blur-sm" />
+  </div>
+
+  <div className="container mx-auto px-6 relative z-10">
+    <div className="max-w-4xl mx-auto text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="mb-8"
+      >
+      </motion.div>
+
+      <motion.p
+        className="text-xl md:text-2xl leading-relaxed text-gray-800 font-semibold"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      >
+        <span className="text-blue-600 font-bold">35년 이상의</span> 현장 경험을 바탕으로<br />
+        고객님의 세무문제 해결에<br />
+        최선을 다하겠습니다.
+      </motion.p>
+    </div>
+  </div>
+</section>
+
+
+      {/* Career Section */}
+<section className="relative py-16 overflow-hidden">
+  {/* Background with blue overlay */}
+  <div className="absolute inset-0">
+    <img
+      src="/images/career-bg.jpg"
+      alt="background"
+      className="w-full h-full object-cover"
+    />
+    <div className="absolute inset-0 bg-blue-900/80" />
+  </div>
+
+  <div className="container mx-auto px-6 relative z-10">
+    <div className="max-w-4xl">
+      {/* Name and Title */}
+      <motion.div
+        className="flex items-baseline gap-4 mb-8"
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
+        <h2 className="text-4xl md:text-5xl font-bold text-white">장혁배</h2>
+        <div>
+          <p className="text-xl text-white mb-1">대표 세무사</p>
+          <p className="text-lg text-blue-200">Tax Accountant</p>
+        </div>
+      </motion.div>
+
+      {/* Career History */}
+      <div className="grid md:grid-cols-[120px,1fr] gap-4">
+  <motion.div
+    initial={{ opacity: 0, x: -20 }}
+    whileInView={{ opacity: 1, x: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.8, delay: 0.2 }}
+    className="text-xl font-bold text-white"
+  >
+    약력
+  </motion.div>
+  <motion.div
+    initial={{ opacity: 0, x: -20 }}
+    whileInView={{ opacity: 1, x: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.8, delay: 0.4 }}
+    className="space-y-3"
+  >
+    {[
+      "세무법인 택스인 대표세무사",
+      "국세청 35년 근무",
+      "동안양세무서 납세자보호담당관",
+      "성남세무서 조사과장",
+      "분당세무서 부가가치세과장",
+      "경기 광주세무서 재산 법인세과장",
+      "이하 중략"
+
+    ].map((item, index) => (
+      <motion.div
+        key={index}
+        className="flex items-center gap-2 text-lg text-gray-100"
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.4 + (index * 0.1) }}
+      >
+        <div className="w-1.5 h-1.5 rounded-full bg-blue-300 flex-shrink-0" />
+        <p>{item}</p>
+      </motion.div>
+    ))}
+  </motion.div>
+</div>
+    </div>
+  </div>
+</section>
       {/* Contacts Section */}
 <section className="py-24 relative overflow-hidden">
   {/* Background with gradient */}
