@@ -53,8 +53,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         <nav className="mt-6">
           <div className="px-3">
             {[
-              { title: '세무사 소개', href: '/accountant' },
               { title: '회사 소개', href: '/company' },
+              { title: '세무사 소개', href: '#' },
               { title: '오시는 길', href: '/location' }
             ].map((item, index) => (
               <motion.a
