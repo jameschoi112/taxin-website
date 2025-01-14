@@ -575,9 +575,9 @@ const scrollTextVariants = {
     <nav className="mt-6">
       <div className="px-3 ">
         {[
-          { title: '세무사 소개', href: '#' },
           { title: '회사 소개', href: '/company' },
-          { title: '오시는 길', href: '#' }
+          { title: '세무사 소개', href: '#' },
+          { title: '오시는 길', href: '/location' }
         ].map((item, index) => (
           <motion.a
             key={item.title}

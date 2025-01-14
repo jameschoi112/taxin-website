@@ -7,10 +7,6 @@ import { useNavigate } from 'react-router-dom';
 const Header = ({ setIsSidebarOpen }) => {
   const navigate = useNavigate();
 
-  const goToHome = () => {
-    navigate('/');
-  };
-
   const headerVariants = {
     hidden: { opacity: 0, y: -20 },
     visible: {
@@ -30,7 +26,7 @@ const Header = ({ setIsSidebarOpen }) => {
       <div className="container mx-auto px-6 py-6 flex justify-between items-center">
         <div
           className="flex items-center cursor-pointer"
-          onClick={goToHome}
+          onClick={() => navigate('/')}
         >
           <img src="/images/logo2.png" alt="택스인 로고" className="h-12 w-auto" />
           <h1 className="ml-4 text-xl font-bold text-white tracking-tight">세무법인 택스인</h1>

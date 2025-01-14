@@ -1,18 +1,18 @@
+// src/components/Company/Company.jsx
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, BookOpen, ChartBar } from 'lucide-react';
-import Header from '../Header/Header';  // Header import
-import Sidebar from '../Sidebar/Sidebar';  // Sidebar도 따로 컴포넌트로 분리하면 좋습니다
-
+import Header from '../Header/Header';
+import Sidebar from '../Sidebar/Sidebar';
 
 const Company = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header setIsSidebarOpen={setIsSidebarOpen} />
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+
       {/* Hero Section */}
       <section className="relative h-[60vh] overflow-hidden">
         <div className="absolute inset-0">
