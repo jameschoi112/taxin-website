@@ -69,7 +69,7 @@ const Location = () => {
                     <div className="flex items-center gap-2">
                       <Train className="w-6 h-6 text-blue-800 flex-shrink-0" />
                       <div className="flex items-center gap-2">
-                        <span className="px-3 py-1 bg-yellow-400 text-white rounded-full text-sm font-medium whitespace-nowrap min-w-[72px] text-center">
+                        <span className="px-3 py-1 bg-yellow-400 text-white rounded-full text-sm font-bold whitespace-nowrap min-w-[72px] text-center">
                           수인분당
                         </span>
                         <span className="text-gray-600">

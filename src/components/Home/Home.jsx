@@ -512,13 +512,13 @@ const scrollTextVariants = {
               <h3 className="text-s font-bold mb-4">세무법인 택스인</h3>
               <p className="text-sm mb-2">대표자: 장혁배</p>
               <p className="text-sm mb-2">전화번호: 031-206-7676</p>
-              <p className="text-sm mb-2">사업자 등록번호: xxx-xxx-xxxx</p>
+              <p className="text-sm mb-2">사업자 등록번호: 135-85-51836</p>
               <p className="text-sm">경기 수원시 영통구 청명남로 6 4층</p>
             </div>
           </div>
           <div className="mt-10 pt-6 border-t border-blue-800">
             <p className="text-left text-sm">
-              Copyright © 2025 semu bubin TEXIN. All rights reserved.
+              Copyright © 2025 semububin TEXIN. All rights reserved.
             </p>
           </div>
         </div>
@@ -576,7 +576,6 @@ const scrollTextVariants = {
       <div className="px-3 ">
         {[
           { title: '회사 소개', href: '/company' },
-          { title: '세무사 소개', href: '#' },
           { title: '오시는 길', href: '/location' }
         ].map((item, index) => (
           <motion.a

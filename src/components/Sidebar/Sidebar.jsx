@@ -1,4 +1,3 @@
-// src/components/Sidebar/Sidebar.jsx
 import React from 'react';
 import { X } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -54,7 +53,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           <div className="px-3">
             {[
               { title: '회사 소개', href: '/company' },
-              { title: '세무사 소개', href: '#' },
               { title: '오시는 길', href: '/location' }
             ].map((item, index) => (
               <motion.a

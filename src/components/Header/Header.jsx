@@ -1,4 +1,3 @@
-// src/components/Header/Header.jsx
 import React from 'react';
 import { Menu } from 'lucide-react';
 import { motion } from 'framer-motion';
