@@ -61,7 +61,7 @@ const Location = () => {
                 <div className="space-y-4">
                   <div className="flex items-start gap-4">
                     <MapPin className="w-6 h-6 text-blue-800 flex-shrink-0 mt-1" />
-                    <p className="text-lg text-gray-700">
+                    <p className="text-s text-gray-700">
                       경기 수원시 영통구 청명남로 6 4층
                     </p>
                   </div>
