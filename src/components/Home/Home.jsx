@@ -5,11 +5,16 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import { useForm } from 'react-hook-form';
 import emailjs from '@emailjs/browser';
+import smoothscroll from 'smoothscroll-polyfill';
+import _ from 'lodash';
+
 
 const Home = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showChatModal, setShowChatModal] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -37,6 +42,65 @@ const onSubmit = async (data) => {
     alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.');
   }
 };
+  useEffect(() => {
+  // polyfill 킥스타트
+  smoothscroll.polyfill();
+}, []);
+
+  const handleScroll = () => {
+  const servicesSection = document.getElementById('services');
+  servicesSection.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+};
+
+  useEffect(() => {
+  const handleAutoScroll = () => {
+    if (hasScrolled || isScrolling) return;
+
+    const servicesSection = document.getElementById('services');
+    const servicesSectionTop = servicesSection.offsetTop;
+    const scrollPosition = window.scrollY;
+
+    if (scrollPosition > 50 && scrollPosition < servicesSectionTop / 4) {
+      setIsScrolling(true);  // 스크롤 시작
+
+      const startPosition = window.scrollY;
+      const endPosition = servicesSectionTop;
+      const duration = 1500; // 1.5초
+      const startTime = performance.now();
+
+      const animateScroll = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // easeOutExpo - 더 부드러운 감속 효과
+        const easing = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+
+        const currentPosition = startPosition + (endPosition - startPosition) * easing;
+        window.scrollTo(0, currentPosition);
+
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll);
+        } else {
+          setHasScrolled(true);
+          setIsScrolling(false);  // 스크롤 완료
+        }
+      };
+
+      requestAnimationFrame(animateScroll);
+    }
+  };
+
+  const throttledScroll = _.throttle(handleAutoScroll, 100);  // 100ms 쓰로틀링
+  window.addEventListener('scroll', throttledScroll);
+
+  return () => {
+    window.removeEventListener('scroll', throttledScroll);
+    throttledScroll.cancel();
+  };
+}, [hasScrolled, isScrolling]);
 
   const handleCall = () => {
     window.location.href = 'tel:031-206-7676';
@@ -171,7 +235,10 @@ const scrollTextVariants = {
     </motion.div>
 
     {/* Scroll Indicator */}
-    <div className="absolute bottom-8 md:bottom-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+    <div
+      className="absolute bottom-8 md:bottom-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer"
+      onClick={handleScroll}
+    >
       <motion.p
         className="text-white text-xs md:text-sm font-light tracking-widest mb-2"
         initial="hidden"
@@ -192,9 +259,9 @@ const scrollTextVariants = {
 </div>
 
       {/* Services Section */}
-<section className="py-24 relative min-h-[600px] overflow-hidden">
+<section className="relative h-[100dvh] overflow-hidden" id="services">
   {/* Background Image with Blue Overlay */}
-  <div className="absolute top-0 left-0 right-0 bottom-0 z-0">
+  <div className="absolute inset-0">
     <img
       src="/images/service-bg.jpg"
       alt="background"
@@ -204,24 +271,39 @@ const scrollTextVariants = {
     <div className="absolute inset-0 bg-blue-900/50" />
   </div>
 
-  <div className="container mx-auto px-6 relative z-10">
-    {/* Introduction Text - Changed to left align */}
-    <div className="max-w-2xl mb-16">
-      <motion.p
-        className="text-white text-xl font-bold :text-2xl leading-relaxed"
+  <div className="container mx-auto px-6 relative z-10 h-full py-16">
+    {/* Introduction Text */}
+    <div className="max-w-2xl pt-8">
+  <div className="overflow-hidden">
+    {[
+      "세무법인 택스인은",
+      "전문 대표 세무사가",
+      "아래의 서비스들을 제공드립니다"
+    ].map((line, index) => (
+      <motion.div
+        key={index}
         initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        whileInView={{
+          opacity: 1,
+          y: 0
+        }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
+        transition={{
+          duration: 0.8,
+          delay: index * 0.2,  // 각 줄마다 0.2초씩 딜레이
+          ease: [0.22, 1, 0.36, 1]  // custom easing
+        }}
       >
-        세무법인 택스인은<br />
-        세무 전문가들이 모인<br /> 전문 기관으로<br />
-        아래의 서비스들을 제공드립니다
-      </motion.p>
-    </div>
+        <p className="text-white text-xl md:text-xl font-bold leading-relaxed">
+          {line}
+        </p>
+      </motion.div>
+    ))}
+  </div>
+</div>
 
     {/* Service Slides */}
-    <div className="max-w-5xl mx-auto">
+    <div className="mt-8 md:mt-12 h-[50vh]">
       <Swiper
         modules={[Pagination, Navigation, Autoplay]}
         pagination={{
@@ -236,22 +318,9 @@ const scrollTextVariants = {
           disableOnInteraction: false,
         }}
         slidesPerView={1}
-        centeredSlides={true}
         spaceBetween={30}
         loop={true}
-        className="service-slider"
-        breakpoints={{
-          // 모바일에서는 한 장만 보이도록
-          640: {
-            slidesPerView: 1.5,
-            spaceBetween: 20,
-          },
-          // 태블릿 이상에서는 1.5장 보이도록
-          768: {
-            slidesPerView: 1.5,
-            spaceBetween: 30,
-          }
-        }}
+        className="h-full"
       >
         {[
           {
@@ -507,7 +576,7 @@ const scrollTextVariants = {
       <div className="px-3 ">
         {[
           { title: '세무사 소개', href: '#' },
-          { title: '회사 소개', href: '#' },
+          { title: '회사 소개', href: '/company' },
           { title: '오시는 길', href: '#' }
         ].map((item, index) => (
           <motion.a
