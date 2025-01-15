@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Car, Train } from 'lucide-react';
+import { MapPin, Car, Train, Phone } from 'lucide-react';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 
 const Location = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const handleCall = () => {
+    window.location.href = 'tel:031-206-7676';
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -112,12 +116,23 @@ const Location = () => {
                   <h3 className="text-xl font-bold text-gray-900 mb-4">
                     주차 안내사항
                   </h3>
-                  <ul className="space-y-3 text-gray-600">
+                  <ul className="space-y-3 text-gray-600 mb-8">
                     <li>• 영통노상주차장에 주차가 가능합니다</li>
                     <li>• 주차 비용은 저희가 전액 부담합니다</li>
                     <li>• 자세한 안내가 필요하시면 전화로 문의 부탁드립니다. 친절히 안내해 드리겠습니다.</li>
                     <li>• 주차 관련 문의: 031-206-7676</li>
                   </ul>
+                  <div className="flex justify-center">
+                  <motion.button
+      onClick={handleCall}
+      className="bg-blue-800 hover:bg-blue-700 text-white py-3 px-6 rounded-xl flex items-center justify-center space-x-3 transition-colors w-3/4"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <Phone size={20} />
+      <span className="text-lg font-medium">전화 연결</span>
+    </motion.button>
+                 </div>
                 </div>
               </div>
             </motion.div>

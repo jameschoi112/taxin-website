@@ -173,50 +173,55 @@ const Company = () => {
               <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gray-200"/>
 
               {[
-                {
-                  title: "국세청 35년 근무",
-                  description: "국세청에서의 오랜 경험을 통해 축적한 전문성"
-                },
-                {
-                  title: "주요 보직",
-                  description: "동안양세무서 납세자보호담당관\n성남세무서 조사과장\n분당세무서 부가가치세과장\n경기광주세무서 재산법인세과장"
-                },
-                {
-                  title: "국세청 핵심부서 근무",
-                  description: "중부지방국세청 체납추적팀장\n국세청 심사2과\n중부지방국세청 송무과\n중부지방국세청 조사1국/조사3국"
-                },
-                {
-                  title: "세무서 근무",
-                  description: "동수원, 수원, 안산 등 근무"
-                },
-                {
-                  title: "학력",
-                  description: "세무대학 7회 졸업\n청석고 12회 졸업\n청안 초-중 졸업"
-                }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  className="relative mb-12"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: index * 0.2 }}
-                >
-                  <div className="flex items-center">
-                    <div className="w-1/2 pr-8 text-right">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-gray-600 whitespace-pre-line">
-                        {item.description}
-                      </p>
-                    </div>
-                    <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-4">
-                      <div className="w-4 h-4 rounded-full bg-yellow-600 border-4 border-white"/>
-                    </div>
-                    <div className="w-1/2 pl-8"/>
-                  </div>
-                </motion.div>
+  {
+    title: "국세청 35년 근무",
+    description: "국세청에서의 오랜 경험을 통해 축적한 전문성",
+    align: "left"
+  },
+  {
+    title: "주요 보직",
+    description: "동안양세무서 납세자보호담당관\n성남세무서 조사과장\n분당세무서 부가가치세과장\n경기광주세무서 재산법인세과장",
+    align: "right"
+  },
+  {
+    title: "국세청 핵심부서 근무",
+    description: "중부지방국세청 체납추적팀장\n국세청 심사2과\n중부지방국세청 송무과\n중부지방국세청 조사1국/조사3국",
+    align: "left"
+  },
+  {
+    title: "세무서 근무",
+    description: "동수원, 수원, 안산 등 근무",
+    align: "right"
+  },
+  {
+    title: "학력",
+    description: "세무대학 7회 졸업\n청석고 12회 졸업\n청안 초-중 졸업",
+    align: "left"
+  }
+].map((item, index) => (
+  <motion.div
+    key={index}
+    className="relative mb-12"
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.8, delay: index * 0.2 }}
+  >
+    <div className="flex items-center">
+      <div className={`w-1/2 ${item.align === 'left' ? 'pr-8 text-right' : 'pl-8 text-left'} ${item.align === 'right' && 'order-2'}`}>
+        <h3 className="text-lg font-bold text-gray-900 mb-2">
+          {item.title}
+        </h3>
+        <p className="text-gray-600 whitespace-pre-line">
+          {item.description}
+        </p>
+      </div>
+      <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-4">
+        <div className="w-4 h-4 rounded-full bg-yellow-600 border-4 border-white"/>
+      </div>
+      {item.align === 'left' ? <div className="w-1/2 pl-8"/> : <div className="w-1/2 pr-8"/>}
+    </div>
+  </motion.div>
               ))}
             </div>
           </div>
