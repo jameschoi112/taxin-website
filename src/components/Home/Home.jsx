@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Phone, MessageCircle, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
@@ -7,7 +6,8 @@ import { useForm } from 'react-hook-form';
 import emailjs from '@emailjs/browser';
 import smoothscroll from 'smoothscroll-polyfill';
 import _ from 'lodash';
-
+import Sidebar from '../Sidebar/Sidebar';
+import {X, Menu, Phone, MessageCircle, ChevronDown } from 'lucide-react';
 
 const Home = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -189,7 +189,7 @@ const scrollTextVariants = {
           </button>
         </div>
       </motion.header>
-
+       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
       {/* Hero Section with Animations */}
 <div className="relative h-[100dvh] md:h-[85dvh] overflow-hidden">
   {/* Background Image */}
@@ -636,83 +636,6 @@ const scrollTextVariants = {
           </div>
         </div>
       </footer>
-
-      {/* Sidebar */}
-<motion.div
-  className={`fixed inset-0 z-50 ${isSidebarOpen ? 'visible' : 'invisible'}`}
-  initial={false}
-  animate={isSidebarOpen ? "visible" : "hidden"}
-  variants={{
-    visible: { opacity: 1 },
-    hidden: { opacity: 0 }
-  }}
-  transition={{ duration: 0.3 }}
->
-  {/* Backdrop with blur */}
-  <motion.div
-    className="absolute inset-0 backdrop-blur-sm bg-black/30"
-    variants={{
-      visible: { opacity: 1 },
-      hidden: { opacity: 0 }
-    }}
-    transition={{ duration: 0.3 }}
-    onClick={() => setIsSidebarOpen(false)}
-  />
-
-  {/* Sidebar Content */}
-  <motion.div
-    className="absolute right-0 top-0 w-80 h-full bg-gradient-to-br from-blue-900 via-blue-800 to-sky-900"
-    variants={{
-      visible: { x: 0 },
-      hidden: { x: "100%" }
-    }}
-    transition={{ type: "spring", damping: 20 }}
-  >
-    {/* Header */}
-    <div className="p-6 flex justify-between items-center border-b border-white/10">
-      <div className="flex items-center">
-        <img src="/images/logo2.png" alt="택스인 로고" className="h-10 w-auto" />
-        <h2 className="ml-3 text-xl font-bold text-white">세무법인 택스인</h2>
-      </div>
-      <motion.button
-        onClick={() => setIsSidebarOpen(false)}
-        className="text-white/80 hover:text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <X size={24} />
-      </motion.button>
-    </div>
-
-    {/* Navigation */}
-    <nav className="mt-6">
-      <div className="px-3 ">
-        {[
-          { title: '회사 소개', href: '/company' },
-          { title: '오시는 길', href: '/location' }
-        ].map((item, index) => (
-          <motion.a
-            key={item.title}
-            href={item.href}
-            className="flex items-center px-4 py-4 text-white/80 hover:text-white rounded-lg hover:bg-white/10 transition-colors mb-1"
-            whileHover={{ x: 10 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <span className="text-lg font-bold">{item.title}</span>
-          </motion.a>
-        ))}
-      </div>
-    </nav>
-
-    {/* Footer */}
-    <div className="absolute bottom-0 w-full p-6 border-t border-white/10 bg-white/5">
-      <p className="text-white/80 text-center">
-        세무법인 택스인과 함께<br />
-        더 나은 미래를 설계하세요
-      </p>
-    </div>
-  </motion.div>
-</motion.div>
 
       {/* Chat Modal */}
       {showChatModal && (

@@ -1,10 +1,22 @@
-import React from 'react';
-import { X } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { X, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
+  const [isRelatedSitesOpen, setIsRelatedSitesOpen] = useState(false);
+
+  const relatedSites = [
+    {
+      title: '국세청 홈택스',
+      url: 'https://www.hometax.go.kr'
+    },
+    {
+      title: '국세법령정보시스템',
+      url: 'https://taxlaw.nts.go.kr'
+    }
+  ];
 
   return (
     <motion.div
@@ -68,6 +80,46 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 <span className="text-lg font-bold">{item.title}</span>
               </motion.a>
             ))}
+
+            {/* 관련 사이트 드롭다운 */}
+            <div className="mt-2">
+              <motion.button
+                onClick={() => setIsRelatedSitesOpen(!isRelatedSitesOpen)}
+                className="w-full flex items-center justify-between px-4 py-4 text-yellow-300 hover:text-yellow-200 rounded-lg hover:bg-white/10 transition-colors"
+                whileHover={{ x: 10 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <span className="text-lg font-bold">관련 사이트</span>
+                {isRelatedSitesOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+              </motion.button>
+
+              <AnimatePresence>
+                {isRelatedSitesOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
+                  >
+                    {relatedSites.map((site, index) => (
+                      <motion.a
+                        key={site.title}
+                        href={site.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center px-8 py-3 text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+                        whileHover={{ x: 10 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <span className="text-base">{site.title}</span>
+                        <ExternalLink size={16} className="ml-2 opacity-50" />
+                      </motion.a>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </nav>
 
