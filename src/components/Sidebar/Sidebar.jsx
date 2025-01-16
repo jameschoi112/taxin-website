@@ -64,7 +64,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         <nav className="mt-6">
           <div className="px-3">
             {[
-              { title: '회사 소개', href: '/company' },
+              { title: '회사소개', href: '/company' },
+
               { title: '오시는 길', href: '/location' }
             ].map((item, index) => (
               <motion.a

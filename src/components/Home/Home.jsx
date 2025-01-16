@@ -3,11 +3,14 @@ import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import { useForm } from 'react-hook-form';
-import emailjs from '@emailjs/browser';
 import smoothscroll from 'smoothscroll-polyfill';
 import _ from 'lodash';
 import Sidebar from '../Sidebar/Sidebar';
-import {X, Menu, Phone, MessageCircle, ChevronDown } from 'lucide-react';
+import {X, Phone, MessageCircle, ChevronDown } from 'lucide-react';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../../firebase/config';
+import emailjs from '@emailjs/browser';
+import Header from '../Header/Header';
 
 const Home = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -15,33 +18,55 @@ const Home = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [isAgreed, setIsAgreed] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
   const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm();
 
+
+// Firebase 저장 함수
 const onSubmit = async (data) => {
+  if (!isAgreed) {
+    alert('개인정보 수집 이용에 동의해주세요.');
+    return;
+  }
+
   try {
+    // Firebase에 저장
+    await addDoc(collection(db, 'consultations'), {
+      name: data.name,
+      phone: data.phone,
+      message: data.message,
+      createdAt: serverTimestamp(),
+      status: '신규'
+    });
+
+    // 이메일 발송
     await emailjs.send(
-      'YOUR_SERVICE_ID',          // EmailJS Service ID
-      'YOUR_TEMPLATE_ID',         // EmailJS Template ID
+      process.env.REACT_APP_EMAILJS_SERVICE_ID,
+      process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
       {
-        to_name: "관리자",
+        to_email: 'wodud0112@naver.com',
+        to_name: '관리자',
         from_name: data.name,
         phone: data.phone,
         message: data.message,
+        subject: '[택스인] 새로운 상담 신청이 접수되었습니다.'
       },
-      'YOUR_PUBLIC_KEY'           // EmailJS Public Key
+      process.env.REACT_APP_EMAILJS_PUBLIC_KEY
     );
 
-    alert('상담 신청이 완료되었습니다.');
+    alert('상담 신청이 완료되었습니다. 관련자가 확인 후 빠르게 연락드리겠습니다. 감사합니다.');
     reset();
+    setIsAgreed(false);
   } catch (error) {
     console.error('Error:', error);
     alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.');
   }
 };
+
   useEffect(() => {
   // polyfill 킥스타트
   smoothscroll.polyfill();
@@ -107,14 +132,6 @@ const onSubmit = async (data) => {
   };
 
   // Animation variants
-  const headerVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, delay: 0.2 }
-    }
-  };
 
   const titleVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -170,25 +187,7 @@ const scrollTextVariants = {
   return (
     <div className="relative min-h-screen bg-slate-100">
       {/* Header */}
-      <motion.header
-        className="absolute w-full z-50 bg-transparent"
-        initial="hidden"
-        animate={isLoaded ? "visible" : "hidden"}
-        variants={headerVariants}
-      >
-        <div className="container mx-auto px-6 py-6 flex justify-between items-center">
-          <div className="flex items-center">
-            <img src="/images/logo2.png" alt="택스인 로고" className="h-12 w-auto" />
-            <h1 className="ml-4 text-xl font-bold text-white tracking-tight">세무법인 택스인</h1>
-          </div>
-          <button
-            onClick={() => setIsSidebarOpen(true)}
-            className="text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
-          >
-            <Menu size={28} />
-          </button>
-        </div>
-      </motion.header>
+  <Header setIsSidebarOpen={setIsSidebarOpen} />
        <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
       {/* Hero Section with Animations */}
 <div className="relative h-[100dvh] md:h-[85dvh] overflow-hidden">
@@ -303,72 +302,80 @@ const scrollTextVariants = {
 </div>
 
     {/* Service Slides */}
-    <div className="mt-8 md:mt-12 h-[50vh]">
-      <Swiper
-        modules={[Pagination, Navigation, Autoplay]}
-        pagination={{
-          clickable: true,
-          bulletClass: 'swiper-pagination-bullet !w-6 !h-1 !rounded-none',
-          bulletActiveClass: 'swiper-pagination-bullet-active !bg-blue-500',
-        }}
-        navigation
-        grabCursor={true}
-        autoplay={{
-          delay: 4000,
-          disableOnInteraction: false,
-        }}
-        slidesPerView={1}
-        spaceBetween={30}
-        loop={true}
-        className="h-full"
-      >
-        {[
-          {
-            image: '/images/service1.jpg',
-            titleKo: '기장 대리',
-            titleEn: 'Tax Accounting Services'
-          },
-          {
-            image: '/images/service2.jpg',
-            titleKo: '세무신고',
-            titleEn: 'Tax Filing Services'
-          },
-          {
-            image: '/images/service3.jpg',
-            titleKo: '조사 대행',
-            titleEn: 'Tax Audit Representation'
-          },
-          {
-            image: '/images/service4.jpg',
-            titleKo: '양도소득세 및 상속 증여세',
-            titleEn: 'Capital Gains, Inheritance, and Gift Tax Advisory'
-          },
-          {
-            image: '/images/service5.jpg',
-            titleKo: '조세 컨설팅',
-            titleEn: 'Tax Advisory and Consulting'
-          }
-        ].map((service, index) => (
-          <SwiperSlide key={index}>
-            <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
-              <img
-                src={service.image}
-                alt={service.titleKo}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-                <h3 className="text-white text-lg font-medium mb-1">
-                  {service.titleKo}
-                </h3>
-                <p className="text-sky-300 text-sm">
-                  {service.titleEn}
-                </p>
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+<div className="mt-8 md:mt-12 h-[30vh] md:h-[60vh]">
+  <Swiper
+    modules={[Pagination, Navigation, Autoplay]}
+    pagination={{
+      clickable: true,
+      bulletClass: 'swiper-pagination-bullet !w-6 !h-1 !rounded-none',
+      bulletActiveClass: 'swiper-pagination-bullet-active !bg-blue-500',
+    }}
+    navigation
+    grabCursor={true}
+    autoplay={{
+      delay: 4000,
+      disableOnInteraction: false,
+    }}
+    slidesPerView={1}
+    spaceBetween={30}
+    breakpoints={{
+      768: {
+        slidesPerView: 2,
+      },
+      1024: {
+        slidesPerView: 3,
+      },
+    }}
+    loop={true}
+    className="h-full"
+  >
+    {[
+      {
+        image: '/images/service1.jpg',
+        titleKo: '기장 대리',
+        titleEn: 'Tax Accounting Services'
+      },
+      {
+        image: '/images/service2.jpg',
+        titleKo: '세무신고',
+        titleEn: 'Tax Filing Services'
+      },
+      {
+        image: '/images/service3.jpg',
+        titleKo: '조사 대행',
+        titleEn: 'Tax Audit Representation'
+      },
+      {
+        image: '/images/service4.jpg',
+        titleKo: '양도소득세 및 상속 증여세',
+        titleEn: 'Capital Gains, Inheritance, and Gift Tax Advisory'
+      },
+      {
+        image: '/images/service5.jpg',
+        titleKo: '조세 컨설팅',
+        titleEn: 'Tax Advisory and Consulting'
+      }
+    ].map((service, index) => (
+      <SwiperSlide key={index}>
+        <div className="relative h-full rounded-lg overflow-hidden">
+          <img
+            src={service.image}
+            alt={service.titleKo}
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+            <h3 className="text-white text-xl font-medium mb-2">
+              {service.titleKo}
+            </h3>
+            <p className="text-sky-300 text-sm">
+              {service.titleEn}
+            </p>
+          </div>
+        </div>
+      </SwiperSlide>
+    ))}
+  </Swiper>
+</div>
   </div>
 </section>
 
@@ -595,22 +602,46 @@ const scrollTextVariants = {
               className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[120px]"
             />
           </div>
-          <motion.button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-4 px-6 rounded-xl flex items-center justify-center space-x-3 transition-colors"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <span className="text-lg font-medium">전송중...</span>
-            ) : (
-              <>
-                <MessageCircle size={20} />
-                <span className="text-lg font-medium">상담 신청하기</span>
-              </>
-            )}
-          </motion.button>
+          <div className="relative">
+    <div className="bg-white/10 border border-white/20 rounded-lg p-4 h-32 overflow-y-auto text-sm text-white/70">
+      <h4 className="font-medium mb-2">개인정보 수집·이용 동의(필수)</h4>
+      <h4 className="font-medium mb-2">세무법인 택스인(이하 “회사”)은 고객님의 개인정보를 소중히 여기며, 관련 법령을 준수하여 개인정보를 보호하기 위해 최선을 다하고 있습니다. 아래는 개인정보취급방침의 주요 내용을 담고 있습니다.</h4>
+      <h4 className="font-medium mb-2">개인정보의 수집 항목 및 방법</h4>
+      <h4 className="font-medium mb-2">수집방법 : 홈페이지 - 상담 신청</h4>
+      <p>1. 수집하는 개인정보 항목: 성함, 연락처</p>
+      <p>2. 수집 및 이용목적 : 상담 문의에 대한 답변, 상담 관련 용도</p>
+      <p>3. 보유 및 이용기간 : 3개월 / 상담 완료 후 폐기</p>
+      <p>4. 동의를 거부할 권리가 있으며, 동의 거부 시 상담 신청이 제한됩니다.</p>
+    </div>
+  </div>
+  <div className="flex items-center space-x-2">
+    <input
+      type="checkbox"
+      id="agree"
+      checked={isAgreed}
+      onChange={(e) => setIsAgreed(e.target.checked)}
+      className="w-4 h-4 rounded border-white/20 bg-white/10 text-blue-500 focus:ring-blue-500"
+    />
+    <label htmlFor="agree" className="text-white/70 text-sm">
+      개인정보 수집·이용에 동의합니다.
+    </label>
+  </div>
+  <motion.button
+    type="submit"
+    className="w-full bg-blue-500 hover:bg-blue-600 text-white py-4 px-6 rounded-xl flex items-center justify-center space-x-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+    whileHover={{ scale: 1.02 }}
+    whileTap={{ scale: 0.98 }}
+    disabled={isSubmitting || !isAgreed}
+  >
+    {isSubmitting ? (
+      <span className="text-lg font-medium">전송중...</span>
+    ) : (
+      <>
+        <MessageCircle size={20} />
+        <span className="text-lg font-medium">상담 신청하기</span>
+      </>
+    )}
+  </motion.button>
         </form>
       </motion.div>
     </div>
@@ -625,8 +656,11 @@ const scrollTextVariants = {
               <h3 className="text-s font-bold mb-4">세무법인 택스인</h3>
               <p className="text-sm mb-2">대표자: 장혁배</p>
               <p className="text-sm mb-2">전화번호: 031-206-7676</p>
-              <p className="text-sm mb-2">사업자 등록번호: 135-85-51836</p>
+              <p className="text-sm mb-2">팩스번호: 031-254-1840</p>
+              <p className="text-sm mb-2">이메일: Jhbkr@naver.com</p>
+              <p className="text-sm mb-4">사업자 등록번호: 135-85-51836</p>
               <p className="text-sm">경기 수원시 영통구 청명남로 6 4층</p>
+              <p className="text-sm">Yeongtong-dong, 4 floor , 6 Cheongmyeongnam-ro, Yeongtong-gu, Suwon-si, Gyeonggi-do</p>
             </div>
           </div>
           <div className="mt-10 pt-6 border-t border-blue-800">
