@@ -288,9 +288,9 @@ const scrollTextVariants = {
         }}
         viewport={{ once: true }}
         transition={{
-          duration: 0.8,
-          delay: index * 0.2,  // 각 줄마다 0.2초씩 딜레이
-          ease: [0.22, 1, 0.36, 1]  // custom easing
+          duration: 1.2,
+          delay: index * 0.5,  // 각 줄마다 0.2초씩 딜레이
+          ease: [0.16, 1, 0.3, 1]  // custom easing
         }}
       >
         <p className="text-white text-xl md:text-xl font-bold leading-relaxed">

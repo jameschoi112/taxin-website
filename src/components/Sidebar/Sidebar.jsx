@@ -53,7 +53,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         onClick={() => setIsOpen(false)}
       />
       <motion.div
-        className="absolute right-0 top-0 w-80 h-full bg-gradient-to-br from-blue-900 via-blue-800 to-sky-900"
+        className="absolute right-0 top-0 w-80 h-full bg-gradient-to-br from-blue-900/80 via-blue-800/80 to-sky-900/80 backdrop-blur-md"
         variants={{
           visible: { x: 0 },
           hidden: { x: "100%" }
