@@ -7,6 +7,20 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
   const [isRelatedSitesOpen, setIsRelatedSitesOpen] = useState(false);
 
+  const handleNavigation = (path) => {
+    // 1. 사이드바 닫기
+    setIsOpen(false);
+
+    // 2. 페이지 이동
+    navigate(path);
+
+    // 3. 스크롤을 최상단으로 이동
+    window.scrollTo({
+      top: 0,
+      behavior: 'instant' // 즉시 이동
+    });
+  };
+
   const relatedSites = [
     {
       title: '국세청 홈택스',
@@ -46,6 +60,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         }}
         transition={{ type: "spring", damping: 20 }}
       >
+        {/* Logo and Close button */}
         <div className="p-6 flex justify-between items-center border-b border-white/10">
           <div className="flex items-center">
             <img src="/images/logo2.png" alt="택스인 로고" className="h-10 w-auto" />
@@ -61,19 +76,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </motion.button>
         </div>
 
+        {/* Navigation */}
         <nav className="mt-6">
           <div className="px-3">
             {[
               { title: '회사소개', href: '/company' },
-
               { title: '오시는 길', href: '/location' }
-            ].map((item, index) => (
+            ].map((item) => (
               <motion.a
                 key={item.title}
-                onClick={() => {
-                  navigate(item.href);
-                  setIsOpen(false);
-                }}
+                onClick={() => handleNavigation(item.href)}
                 className="flex items-center px-4 py-4 text-white/80 hover:text-white rounded-lg hover:bg-white/10 transition-colors mb-1 cursor-pointer"
                 whileHover={{ x: 10 }}
                 transition={{ type: "spring", stiffness: 300 }}
@@ -82,7 +94,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               </motion.a>
             ))}
 
-            {/* 관련 사이트 드롭다운 */}
+            {/* Related Sites Dropdown */}
             <div className="mt-2">
               <motion.button
                 onClick={() => setIsRelatedSitesOpen(!isRelatedSitesOpen)}
@@ -103,7 +115,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     transition={{ duration: 0.3 }}
                     className="overflow-hidden"
                   >
-                    {relatedSites.map((site, index) => (
+                    {relatedSites.map((site) => (
                       <motion.a
                         key={site.title}
                         href={site.url}
@@ -124,6 +136,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </div>
         </nav>
 
+        {/* Footer */}
         <div className="absolute bottom-0 w-full p-6 border-t border-white/10 bg-white/5">
           <p className="text-white/80 text-center">
             세무법인 택스인과 함께<br />
