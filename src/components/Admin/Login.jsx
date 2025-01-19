@@ -1,21 +1,38 @@
-// src/components/Admin/Login.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { loginWithEmail } from '../../firebase/auth';
+import { Eye, EyeOff } from 'lucide-react';
 
 const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberEmail, setRememberEmail] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberedEmail');
+    if (savedEmail) {
+      setValue('email', savedEmail);
+      setRememberEmail(true);
+    }
+  }, [setValue]);
 
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
       setError(null);
       await loginWithEmail(data.email, data.password);
+
+      if (rememberEmail) {
+        localStorage.setItem('rememberedEmail', data.email);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+      }
+
       navigate('/admin/dashboard');
     } catch (err) {
       setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
@@ -45,6 +62,7 @@ const Login = () => {
         {/* Login Form */}
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Email Field */}
             <div>
               <input
                 type="email"
@@ -63,29 +81,55 @@ const Login = () => {
               )}
             </div>
 
+            {/* Password Field */}
             <div>
-              <input
-                type="password"
-                placeholder="비밀번호"
-                {...register('password', {
-                  required: '비밀번호를 입력해주세요'
-                })}
-                className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="비밀번호"
+                  {...register('password', {
+                    required: '비밀번호를 입력해주세요'
+                  })}
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white/80 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
               {errors.password && (
                 <p className="mt-1 text-sm text-red-300">{errors.password.message}</p>
               )}
             </div>
 
+            {/* Remember Email Checkbox */}
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="remember-email"
+                checked={rememberEmail}
+                onChange={(e) => setRememberEmail(e.target.checked)}
+                className="w-4 h-4 rounded border-white/20 bg-white/10 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+              />
+              <label htmlFor="remember-email" className="ml-2 text-sm text-white/80 select-none cursor-pointer">
+                아이디 저장
+              </label>
+            </div>
+
+            {/* Error Message */}
             {error && (
               <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-lg">
                 <p className="text-sm text-red-200">{error}</p>
               </div>
             )}
 
+            {/* Submit Button */}
             <motion.button
               type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium transition-colors"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               disabled={isLoading}

@@ -1,12 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, getDocs, updateDoc, doc } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  orderBy,
+  getDocs,
+  updateDoc,
+  deleteDoc,  // deleteDoc 추가
+  doc
+} from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import Sidebar from './Sidebar';
-import { Check, Phone } from 'lucide-react';
+import { Trash2,Check, Phone } from 'lucide-react';
 
 const AdminConsultations = () => {
   const [consultations, setConsultations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const deleteConsultation = async (id) => {
+  if (!window.confirm('정말로 이 상담 신청을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.')) {
+    return;
+  }
+
+  try {
+    await deleteDoc(doc(db, 'consultations', id));
+    setConsultations(prevConsultations =>
+      prevConsultations.filter(consultation => consultation.id !== id)
+    );
+  } catch (error) {
+    console.error('삭제 실패:', error);
+    alert('삭제 중 오류가 발생했습니다.');
+  }
+};
+
 
   // 상담 내역 불러오기
   const fetchConsultations = async () => {
@@ -143,6 +168,13 @@ const AdminConsultations = () => {
                             완료처리
                           </button>
                         )}
+                        <button
+                        onClick={() => deleteConsultation(consultation.id)}
+                        className="px-3 py-1 text-sm text-red-400 hover:text-red-300 border border-red-400 hover:border-red-300 rounded transition-colors flex items-center"
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" />
+                        삭제
+                      </button>
                       </div>
                     </div>
                   </div>

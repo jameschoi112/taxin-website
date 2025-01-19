@@ -20,8 +20,9 @@ const Sidebar = () => {
   const menuItems = [
     { name: '대시보드', icon: HomeIcon, path: '/admin/dashboard' },
     { name: '공지사항', icon: BellIcon, path: '/admin/notices' },
-    { name: '주요 세무내용', icon: DocumentTextIcon, path: '/admin/tax-info' },
+    { name: '세무일정', icon: DocumentTextIcon, path: '/admin/schedules' },
     { name: '상담 신청 내역', icon: ChatBubbleLeftIcon, path: '/admin/consultations' },
+    { name: '자료실', icon: ChatBubbleLeftIcon, path: '/admin/resources' },
   ];
 
   const handleLogout = async () => {

@@ -81,6 +81,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           <div className="px-3">
             {[
               { title: '회사소개', href: '/company' },
+              { title: '주요세무쟁점', href: '/notice' },
               { title: '오시는 길', href: '/location' }
             ].map((item) => (
               <motion.a

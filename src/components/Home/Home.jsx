@@ -12,6 +12,7 @@ import { db } from '../../firebase/config';
 import emailjs from '@emailjs/browser';
 import Header from '../Header/Header';
 
+
 const Home = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showChatModal, setShowChatModal] = useState(false);
@@ -19,6 +20,28 @@ const Home = () => {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isAgreed, setIsAgreed] = useState(false);
+
+  useEffect(() => {
+  const logPageView = async () => {
+    try {
+      await fetch('https://us-central1-texin-e2c8b.cloudfunctions.net/logPageView', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          page: window.location.pathname,
+          userId: 'anonymous', // 또는 로그인된 사용자 ID
+          userAgent: window.navigator.userAgent
+        })
+      });
+    } catch (error) {
+      console.error('Failed to log page view:', error);
+    }
+  };
+
+  logPageView();
+}, []);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -665,7 +688,7 @@ const scrollTextVariants = {
           </div>
           <div className="mt-10 pt-6 border-t border-blue-800">
             <p className="text-left text-sm">
-              Copyright © 2025 semububin TEXIN. All rights reserved.
+              Copyright © 2025 Semububin Taxin. All rights reserved.
             </p>
           </div>
         </div>
