@@ -77,26 +77,26 @@ const TaxInfoMain = () => {
           <div className="max-w-5xl mx-auto">
             {/* Tab Navigation */}
             <div className="flex justify-center mb-12">
-              <div className="inline-flex rounded-lg border border-gray-200 bg-white p-1 shadow-lg">
-                {[
-                  { id: 'notices', label: '공지사항' },
-                  { id: 'schedule', label: '세무일정' },
-                  { id: 'resources', label: '자료실' }
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`px-8 py-3 rounded-md text-sm font-medium transition-all ${
-                      activeTab === tab.id
-                        ? 'bg-blue-500 text-white'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+  <div className="inline-flex rounded-lg border border-gray-200 bg-white p-1 shadow-lg">
+    {[
+      { id: 'notices', label: '주요세무쟁점', minWidth: 'min-w-[120px]' },
+      { id: 'schedule', label: '세무일정', minWidth: 'min-w-[100px]' },
+      { id: 'resources', label: '자료실', minWidth: 'min-w-[90px]' }
+    ].map((tab) => (
+      <button
+        key={tab.id}
+        onClick={() => setActiveTab(tab.id)}
+        className={`${tab.minWidth} px-6 py-3 rounded-md text-sm font-medium transition-all whitespace-nowrap text-center ${
+          activeTab === tab.id
+            ? 'bg-blue-500 text-white'
+            : 'text-gray-700 hover:bg-gray-100'
+        }`}
+      >
+        {tab.label}
+      </button>
+    ))}
+  </div>
+</div>
 
             {/* Content Area */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-lg">
