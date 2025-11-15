@@ -237,7 +237,7 @@ const Location = () => {
               transition={{ duration: 0.8 }}
             >
               {/* Map */}
-              <div className="rounded-xl overflow-hidden shadow-lg mb-12 h-96 bg-gray-200 relative">
+              <div className="rounded-xl overflow-hidden shadow-lg mb-12 h-40 sm:h-56 md:h-72 lg:h-96 bg-gray-200 relative">
                 {!isMapReady && (
                   <img
                     src="/images/map.png"

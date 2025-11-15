@@ -35,15 +35,19 @@ const Header = ({ setIsSidebarOpen }) => {
   };
 
   return (
-    <motion.header
-      className={`fixed top-0 w-full z-[999] transition-all duration-300 ${
-        isScrolled ? 'bg-blue-900/80 backdrop-blur-sm shadow-xl' : 'bg-transparent'
+    <header
+      className={`fixed top-0 w-full z-[999] transition-colors duration-300 ${
+        isScrolled ? 'bg-blue-900/80 backdrop-blur-md shadow-xl border-b border-white/10' : 'bg-transparent'
       }`}
-      initial="hidden"
-      animate="visible"
-      variants={headerVariants}
     >
-      <div className="container mx-auto px-6 py-6 flex justify-between items-center">
+      <motion.div
+        className={`container mx-auto px-6 flex justify-between items-center transition-all duration-300 ${
+          isScrolled ? 'py-3' : 'py-4 sm:py-6'
+        }`}
+        initial="hidden"
+        animate="visible"
+        variants={headerVariants}
+      >
         <div
           className="flex items-center cursor-pointer"
           onClick={() => handleNavigation('/')}
@@ -57,8 +61,8 @@ const Header = ({ setIsSidebarOpen }) => {
         >
           <Menu size={28} />
         </button>
-      </div>
-    </motion.header>
+      </motion.div>
+    </header>
   );
 };
 
