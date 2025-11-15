@@ -36,7 +36,7 @@ const Header = ({ setIsSidebarOpen }) => {
 
   return (
     <motion.header
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed top-0 w-full z-[999] transition-all duration-300 ${
         isScrolled ? 'bg-blue-900/80 backdrop-blur-sm shadow-xl' : 'bg-transparent'
       }`}
       initial="hidden"

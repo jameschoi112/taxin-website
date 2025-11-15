@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Shield, BookOpen, ChartBar } from 'lucide-react';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
+import { LazyBackground } from '../common/LazyMedia';
 
 const Company = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -77,29 +78,28 @@ const Company = () => {
               ].map((value, index) => (
                 <motion.div
                   key={index}
-                  className="relative h-64 overflow-hidden group rounded-lg"
+                  className="group"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: index * 0.2 }}
                 >
-                  <div className="absolute inset-0">
-                    <img
-                      src={value.bgImage}
-                      alt={value.title}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-indigo-900/80 transition-opacity duration-300 group-hover:bg-indigo-900/70" />
-                  </div>
-                  <div className="relative h-full p-8 flex flex-col">
-                    <div className="mb-6">{value.icon}</div>
-                    <h3 className="text-xl font-bold text-white mb-4">
-                      {value.title}
-                    </h3>
-                    <p className="text-gray-100 leading-relaxed">
-                      {value.description}
-                    </p>
-                  </div>
+                  <LazyBackground
+                    src={value.bgImage}
+                    className="h-64 overflow-hidden rounded-lg"
+                    overlayClassName="bg-indigo-900/80 transition-opacity duration-300 group-hover:bg-indigo-900/70"
+                    backgroundClassName="transition-transform duration-300 group-hover:scale-110"
+                  >
+                    <div className="h-full p-8 flex flex-col">
+                      <div className="mb-6">{value.icon}</div>
+                      <h3 className="text-xl font-bold text-white mb-4">
+                        {value.title}
+                      </h3>
+                      <p className="text-gray-100 leading-relaxed">
+                        {value.description}
+                      </p>
+                    </div>
+                  </LazyBackground>
                 </motion.div>
               ))}
             </div>

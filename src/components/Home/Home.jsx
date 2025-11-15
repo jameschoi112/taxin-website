@@ -11,7 +11,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import emailjs from '@emailjs/browser';
 import Header from '../Header/Header';
-
+import { LazyBackground, LazyImage } from '../common/LazyMedia';
 
 const Home = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -213,19 +213,13 @@ const scrollTextVariants = {
   <Header setIsSidebarOpen={setIsSidebarOpen} />
        <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
       {/* Hero Section with Animations */}
-<div className="relative h-[100dvh] md:h-[85dvh] overflow-hidden">
-  {/* Background Image */}
-  <div className="absolute inset-0">
-    <img
-      src="/images/hero-bg.jpg"
-      alt="배경"
-      className="w-full h-full object-cover"
-    />
-    <div className="absolute inset-0 bg-black/40" />
-  </div>
-
-  {/* Animated Content */}
-  <div className="relative h-full flex flex-col items-center justify-center text-center px-6">
+<LazyBackground
+  src="/images/hero-bg.jpg"
+  className="h-[100dvh] md:h-[85dvh] overflow-hidden"
+  overlayClassName="bg-black/40"
+  priority
+>
+  <div className="h-full flex flex-col items-center justify-center text-center px-6">
     <motion.h2
       className="text-xl md:text-6xl font-bold text-white mb-4 md:mb-6"
       initial="hidden"
@@ -278,22 +272,16 @@ const scrollTextVariants = {
       </motion.div>
     </div>
   </div>
-</div>
+</LazyBackground>
 
       {/* Services Section */}
-<section className="relative h-[100dvh] overflow-hidden" id="services">
-  {/* Background Image with Blue Overlay */}
-  <div className="absolute inset-0">
-    <img
-      src="/images/service-bg.jpg"
-      alt="background"
-      loading="lazy"
-      className="absolute top-1/2 left-1/2 min-w-full min-h-full object-cover -translate-x-1/2 -translate-y-1/2"
-    />
-    <div className="absolute inset-0 bg-blue-900/50" />
-  </div>
-
-  <div className="container mx-auto px-6 relative z-10 h-full py-16">
+<section id="services">
+  <LazyBackground
+    src="/images/service-bg.jpg"
+    className="h-[100dvh]"
+    overlayClassName="bg-blue-900/50"
+  >
+  <div className="container mx-auto px-6 h-full py-16">
     {/* Introduction Text */}
     <div className="max-w-2xl pt-8">
   <div className="overflow-hidden">
@@ -381,10 +369,13 @@ const scrollTextVariants = {
     ].map((service, index) => (
       <SwiperSlide key={index}>
         <div className="relative h-full rounded-lg overflow-hidden">
-          <img
+          <LazyImage
             src={service.image}
             alt={service.titleKo}
-            className="w-full h-full object-cover object-center"
+            wrapperClassName="w-full h-full"
+            imgClassName="object-cover object-center"
+            lazy={false}
+            showPlaceholder={false}
           />
           <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
             <h3 className="text-white text-xl font-medium mb-2">
@@ -400,48 +391,17 @@ const scrollTextVariants = {
   </Swiper>
 </div>
   </div>
+  </LazyBackground>
 </section>
 
-{/* Add these styles to your global CSS */}
-<style jsx global>{`
-  .service-slider .swiper-pagination {
-    position: relative;
-    margin-top: 2rem;
-  }
-
-  .service-slider .swiper-button-next,
-  .service-slider .swiper-button-prev {
-    color: white;
-  }
-
-  .service-slider .swiper-button-next:after,
-  .service-slider .swiper-button-prev:after {
-    font-size: 1.5rem;
-  }
-
-  .service-slider .swiper-pagination-bullet {
-    background: white;
-    opacity: 0.5;
-  }
-
-  .service-slider .swiper-pagination-bullet-active {
-    opacity: 1;
-  }
-`}</style>
-
       {/* Introduction Section */}
-<section className="relative py-20 overflow-hidden">
-  {/* Background with blur */}
-  <div className="absolute inset-0">
-    <img
-      src="/images/intro-bg.jpg"
-      alt="background"
-      className="w-full h-full object-cover"
-    />
-    <div className="absolute inset-0 bg-white/60 backdrop-blur-sm" />
-  </div>
-
-  <div className="container mx-auto px-6 relative z-10">
+<section className="relative overflow-hidden">
+  <LazyBackground
+    src="/images/intro-bg.jpg"
+    className="py-20"
+    overlayClassName="bg-white/60 backdrop-blur-sm"
+  >
+  <div className="container mx-auto px-6">
     <div className="max-w-4xl mx-auto text-center">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -465,22 +425,18 @@ const scrollTextVariants = {
       </motion.p>
     </div>
   </div>
+  </LazyBackground>
 </section>
 
 
       {/* Career Section */}
-<section className="relative py-16 overflow-hidden">
-  {/* Background with blue overlay */}
-  <div className="absolute inset-0">
-    <img
-      src="/images/career-bg.jpg"
-      alt="background"
-      className="w-full h-full object-cover"
-    />
-    <div className="absolute inset-0 bg-blue-900/80" />
-  </div>
-
-  <div className="container mx-auto px-6 relative z-10">
+<section className="relative overflow-hidden">
+  <LazyBackground
+    src="/images/career-bg.jpg"
+    className="py-16"
+    overlayClassName="bg-blue-900/80"
+  >
+  <div className="container mx-auto px-6">
     <div className="max-w-4xl">
       {/* Name and Title */}
       <motion.div
@@ -541,6 +497,7 @@ const scrollTextVariants = {
 </div>
     </div>
   </div>
+  </LazyBackground>
 </section>
       {/* Contacts Section */}
 <section className="py-24 relative overflow-hidden">
