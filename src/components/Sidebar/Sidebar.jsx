@@ -34,7 +34,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   return (
     <motion.div
-      className={`fixed inset-0 z-50 ${isOpen ? 'visible' : 'invisible'}`}
+      className={`fixed inset-0 z-[1000] ${isOpen ? 'visible' : 'invisible'}`}
       initial={false}
       animate={isOpen ? "visible" : "hidden"}
       variants={{
